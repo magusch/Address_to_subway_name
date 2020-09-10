@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import requests
+import os
 
 
 R = 6371.0
@@ -30,7 +31,7 @@ def get_pd_metro(city_id=2):
 	df['z'] = R * np.sin(df['theta'])
 
 	df = df.drop(['lat','lng','theta','phi'], axis=1)
-	filename = f'data/metro-{city_id}.csv' 
+	filename = f'find_metro/data/metro-{city_id}.csv' 
 	df.to_csv(filename)
 
 	return df

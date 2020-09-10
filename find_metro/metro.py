@@ -29,10 +29,10 @@ class get_subway_name():
 		self.city = self.cities[city_id]
 
 		try:
-			filename = f'data/metro-{city_id}.csv' 
+			filename = f'find_metro/data/metro-{city_id}.csv' 
 			metro = pd.read_csv(filename) 
 		except: 
-			from metro_to_csv import get_pd_metro
+			from .metro_to_csv import get_pd_metro
 			metro = get_pd_metro(city_id)
 		metro.index = metro['name']
 		self.metro = metro
