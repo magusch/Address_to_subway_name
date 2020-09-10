@@ -4,7 +4,7 @@ import requests
 
 
 import os
-fileDir = os.path.dirname(os.path.realpath('__file__'))
+fileDir = os.path.dirname(os.path.realpath(__file__))
 
 R = 6371.0
 

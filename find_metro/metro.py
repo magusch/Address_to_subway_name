@@ -5,7 +5,7 @@ import requests
 
 import os 
 
-fileDir = os.path.dirname(os.path.realpath('__file__'))
+fileDir = os.path.dirname(os.path.realpath(__file__))
 
 class get_subway_name():
 	"""
