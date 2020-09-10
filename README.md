@@ -5,6 +5,8 @@ Get subway name from address
 
 В классе используется api http://api.sputnik.ru/maps/geocoder/ для определение координат из адреса и https://api.hh.ru/metro/ для получение таблицы с названием и координатами всех станций метро определённого города
 
+find_metro@git+https://github.com/magusch/Address_to_subway_name.git@8885a932ee11a2c93b827d40ac880710ef74a084
+
 # Функции и классы:
   get_pd_metro(city_id=2) – функция для сохранение и возвращение таблицы для списка городов, для Москвы и Санкт-Петербурга csv файлы уже сохранены
   
