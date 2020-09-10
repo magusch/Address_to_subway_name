@@ -19,7 +19,6 @@ def get_pd_metro(city_id=2):
 			lat.append(station['lat'])
 			lng.append(station['lng'])
 
-
 	df = pd.DataFrame({
 		'name':name, 'lat': lat, 'lng': lng, 
 		})
