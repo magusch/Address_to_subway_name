@@ -3,6 +3,10 @@ import numpy as np
 import requests
 
 
+import os 
+
+fileDir = os.path.dirname(os.path.realpath('__file__'))
+
 class get_subway_name():
 	"""
 	Example:
@@ -29,7 +33,7 @@ class get_subway_name():
 		self.city = self.cities[city_id]
 
 		try:
-			filename = f'{print(os.getcwd())}/find_metro/data/metro-{city_id}.csv' 
+			filename = f'{fileDir}/find_metro/data/metro-{city_id}.csv' 
 			metro = pd.read_csv(filename) 
 		except: 
 			from .metro_to_csv import get_pd_metro
