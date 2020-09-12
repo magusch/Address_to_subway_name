@@ -20,6 +20,7 @@ class get_subway_name():
 	R = 6371.0 #радиус Земли
 
 	cities = {1: 'Москва', 2: 'Санкт-Петербург', 3: 'Екатеринбург', 66:'Нижний Новгород'}
+	city_center = {1:(55.750683, 37.617496), 2:(59.939365, 30.315363), 3:(56.839104, 60.60825)}
 
 	def __init__(self, city_id=2):
 		"""
@@ -31,6 +32,11 @@ class get_subway_name():
 			city_id = 2
 		
 		self.city = self.cities[city_id]
+		
+		if city_id in self.city_center:
+			self.city_center = self.city_center[city_id]
+		else:
+			self.city_center = self.address_to_coord('')
 
 		try:
 			filename = f'{fileDir}/data/metro-{city_id}.csv' 
@@ -60,9 +66,11 @@ class get_subway_name():
 		answer = requests.get(url).json()
 		#lat = answer['result']['viewport']['TopLat']
 		#lng = answer['result']['viewport']['TopLon']
-		lat = answer['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates'][1]
-		lng = answer['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates'][0]
-
+		if 'address' in answer['result']:
+			lat = answer['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates'][1]
+			lng = answer['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates'][0]
+		else: 
+			lat,lng=self.city_center #center of city, default coordinate
 		return lat, lng
 
 	def nearest_subway(self,x,y,z):	
@@ -71,6 +79,8 @@ class get_subway_name():
 
 	def get_subway(self,address):
 		lat, lng = self.address_to_coord(address)
+		if (lat,lng)==self.city_center:
+			return
 		x, y, z = self.polar_to_cartesian(lat, lng)
 		return (self.nearest_subway(x,y,z))
 
