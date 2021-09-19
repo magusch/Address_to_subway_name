@@ -47,9 +47,6 @@ class get_subway_name():
 		metro.index = metro['name']
 		self.metro = metro
 
-
-
-
 	def polar_to_cartesian(self, lat, lng):
 		theta = lat/360*2*np.pi
 		phi = lng/360*2*np.pi
@@ -58,19 +55,17 @@ class get_subway_name():
 		y = self.R * np.cos(theta)*np.sin(phi)
 		z = self.R * np.sin(theta)
 
-		return (x,y,z)
+		return x, y, z
 
 	def address_to_coord(self, address):
-		url = f"http://search.maps.sputnik.ru/search/addr?q={self.city}, {address}&format=JSON"
-		#TODO: добавить bbox координаты для поиска только в пределах города
+		#url = f"http://search.maps.sputnik.ru/search/addr?q={self.city}, {address}&format=JSON"
+		url = f"https://nominatim.openstreetmap.org/search/{self.city}, {address}?format=json&addressdetails=1&limit=1&countrycodes=ru"
 		answer = requests.get(url).json()
-		#lat = answer['result']['viewport']['TopLat']
-		#lng = answer['result']['viewport']['TopLon']
-		if 'address' in answer['result']:
-			lat = answer['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates'][1]
-			lng = answer['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates'][0]
+		if answer:
+			lat = float(answer[0]['lat'])
+			lng = float(answer[0]['lon'])
 		else: 
-			lat,lng=self.city_center #center of city, default coordinate
+			lat, lng = self.city_center #center of city, default coordinate
 		return lat, lng
 
 	def nearest_subway(self,x,y,z):	
@@ -78,10 +73,15 @@ class get_subway_name():
 		return (self.metro['distance'].sort_values().index[0])
 
 	def get_subway(self,address):
-		lat, lng = self.address_to_coord(address)
-		if (lat,lng)==self.city_center:
+		try:
+			lat, lng = self.address_to_coord(address)
+			if (lat,lng)==self.city_center:
+				return
+			x, y, z = self.polar_to_cartesian(lat, lng)
+			return (self.nearest_subway(x,y,z))
+		except Exception as ex:
+			print(ex)
 			return
-		x, y, z = self.polar_to_cartesian(lat, lng)
-		return (self.nearest_subway(x,y,z))
+
 
 
